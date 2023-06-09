@@ -115,6 +115,7 @@ List<string> excludeIngredientsList = new List<string>();
 bool containsBread = true;
 while (containsBread)
 {
+    containsBread = false;
     Console.WriteLine("Do you want to exclude any ingredients? (If not, just press enter to skip.)");
     excludeIngredient = Console.ReadLine().ToUpper().Trim();
     List<string> excludeIngredients = excludeIngredient.Split(',').ToList();
@@ -122,7 +123,7 @@ while (containsBread)
     foreach (string exclude in excludeIngredients)
     {
         excludeIngredient = exclude.Trim();
-        Console.WriteLine(excludeIngredient);
+        //Console.WriteLine(excludeIngredient);
     }
     containsBread = false;
     if (!string.IsNullOrEmpty(excludeIngredient))
@@ -150,24 +151,20 @@ while (containsBread)
 
 foreach (string exclude in excludeIngredientsList)
 {
-    Console.WriteLine("需要被移出去的list" + exclude);
+    Console.WriteLine(exclude);
 }
 
-
+int breadCalories = sandwichIngredients["BREAD"];
 Console.WriteLine("\nMaking your sandwich\n");
 List<string> sandwich = new List<string>();
-int breadCalories = sandwichIngredients["BREAD"];
 int currentCalories = breadCalories * 2;
 excludeIngredientsList.Add("BREAD");
-// https://learn.microsoft.com/en-us/dotnet/api/system.linq.enumerable.where?view=net-6.0
 sandwichIngredients = sandwichIngredients.Where(k => !excludeIngredientsList.Contains(k.Key)).ToDictionary(k => k.Key, k => k.Value);
-// https://learn.microsoft.com/en-us/dotnet/api/system.random?view=net-6.0
 Random random = new Random();
 bool cannotBeAdd = false;
 string lastIngredient = "";
 while (currentCalories <= maxCalories && sandwichIngredients.Count > 0 && !cannotBeAdd)
 {
-    // https://learn.microsoft.com/en-us/dotnet/api/system.linq.enumerable.elementat?view=net-6.0
     string randomIngredient = sandwichIngredients.Keys.ElementAt(random.Next(sandwichIngredients.Count));
     int ingredientCalories = sandwichIngredients[randomIngredient];
     if (currentCalories + ingredientCalories <= maxCalories && randomIngredient != lastIngredient)
